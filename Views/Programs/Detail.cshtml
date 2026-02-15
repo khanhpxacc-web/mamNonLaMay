@@ -1,0 +1,151 @@
+@model ProgramDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/chuong-trinh-hoc">Chương trình học</a></li>
+                        <li class="breadcrumb-item active">@Model.Program?.Title</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">@Model.Program?.Title</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Program Detail *@
+<section class="program-detail py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="program-content">
+                    <img src="@(Model.Program?.ImageUrl ?? "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=800")" 
+                         class="img-fluid rounded-4 shadow mb-4 w-100" alt="@Model.Program?.Title" loading="lazy">
+                    
+                    <div class="program-info bg-light p-4 rounded-4 mb-4">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-success text-white rounded-circle p-2 me-3">
+                                        <i class="fas fa-child"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block">Độ tuổi</small>
+                                        <strong>@Model.Program?.AgeGroup</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-primary text-white rounded-circle p-2 me-3">
+                                        <i class="fas fa-clock"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block">Thờ gian</small>
+                                        <strong>@Model.Program?.Schedule</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-box bg-success text-white rounded-circle p-2 me-3">
+                                        <i class="fas fa-tag"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block">Học phí</small>
+                                        <strong>@(Model.Program?.Price?.ToString("N0") ?? "Liên hệ") đ/tháng</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="fw-bold mb-3">Giới thiệu</h3>
+                    <p class="text-muted mb-4">@Model.Program?.Description</p>
+
+                    <h3 class="fw-bold mb-3">Nội dung chương trình</h3>
+                    <div class="content-text text-muted">
+                        @Html.Raw(Model.Program?.Content?.Replace("\n", "<br>"))
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">Đăng ký ngay</h5>
+                            <p class="text-muted small mb-3">Đăng ký ngay hôm nay để nhận ưu đãi đặc biệt cho học sinh mới!</p>
+                            <a href="/lien-he" class="btn btn-success text-white w-100 rounded-pill mb-2">
+                                <i class="fas fa-edit me-2"></i>Đăng ký học
+                            </a>
+                            <a href="tel:0964106259" class="btn btn-outline-dark w-100 rounded-pill">
+                                <i class="fas fa-phone-alt me-2"></i>Gọi tư vấn
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">Thông tin liên hệ</h5>
+                            <ul class="list-unstyled mb-0">
+                                <li class="mb-2">
+                                    <i class="fas fa-map-marker-alt text-success me-2"></i>
+                                    123 Nguyễn Văn A, Q.1, TP.HCM
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-phone-alt text-success me-2"></i>
+                                    0964106259
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-envelope text-success me-2"></i>
+                                    info@mamnonhoahuongduong.edu.vn
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold mb-3">Chia sẻ</h5>
+                            <div class="share-section d-flex gap-2">
+                                <a href="#" class="btn btn-primary">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="btn btn-info">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="btn btn-success">
+                                    <i class="fab fa-whatsapp"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Navigation *@
+<section class="navigation-section py-4 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <a href="/chuong-trinh-hoc" class="btn btn-outline-dark rounded-pill">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+        </div>
+    </div>
+</section>
+
+
+

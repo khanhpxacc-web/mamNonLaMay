@@ -1,0 +1,373 @@
+@model HomeViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Hero Section *@
+<section class="hero-section d-flex align-items-center">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="hero-content">
+                    <span class="badge bg-success text-white mb-3 px-3 py-2">
+                        <i class="fas fa-star me-1"></i>Hơn 15 năm kinh nghiệm
+                    </span>
+                    <h1 class="display-4 fw-bold mb-4">Nơi Ươm Mầm <span class="text-success">Tương Lai</span> Cho Trẻ Em Việt Nam</h1>
+                    <p class="lead mb-4">Chúng tôi cam kết mang đến môi trường học tập an toàn, thân thiện và sáng tạo, giúp trẻ phát triển toàn diện.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="/chuong-trinh-hoc" class="btn btn-success btn-lg rounded-pill px-4">
+                            <i class="fas fa-book-open me-2"></i>Khám phá chương trình
+                        </a>
+                        <a href="/lien-he" class="btn btn-outline-dark btn-lg rounded-pill px-4">
+                            <i class="fas fa-phone-alt me-2"></i>Liên hệ ngay
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=600" alt="Trẻ em vui chơi" class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Stats Section *@
+<section class="stats-section py-5 bg-success">
+    <div class="container">
+        <div class="row text-center text-white">
+            <div class="col-md-3 col-6 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i class="fas fa-calendar-alt fa-3x mb-3"></i>
+                    <h3 class="fw-bold display-5">@(Model.SchoolInfo?.EstablishedYear > 0 ? DateTime.Now.Year - Model.SchoolInfo.EstablishedYear : 15)+</h3>
+                    <p class="mb-0">Năm kinh nghiệm</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6 mb-4 mb-md-0">
+                <div class="stat-item">
+                    <i class="fas fa-child fa-3x mb-3"></i>
+                    <h3 class="fw-bold display-5">@(Model.SchoolInfo?.StudentCount > 0 ? Model.SchoolInfo.StudentCount : 350)+</h3>
+                    <p class="mb-0">Học sinh</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i class="fas fa-chalkboard-teacher fa-3x mb-3"></i>
+                    <h3 class="fw-bold display-5">@(Model.SchoolInfo?.TeacherCount > 0 ? Model.SchoolInfo.TeacherCount : 45)+</h3>
+                    <p class="mb-0">Giáo viên</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <i class="fas fa-door-open fa-3x mb-3"></i>
+                    <h3 class="fw-bold display-5">@(Model.SchoolInfo?.ClassCount > 0 ? Model.SchoolInfo.ClassCount : 15)+</h3>
+                    <p class="mb-0">Lớp học</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* About Section *@
+<section class="about-section py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <div class="about-images">
+                    <img src="https://images.unsplash.com/photo-1567057419565-4349c49d8a04?w=500" alt="Về chúng tôi" class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content">
+                    <span class="text-success fw-bold">VỀ CHÚNG TÔI</span>
+                    <h2 class="display-6 fw-bold mb-4">Tại Sao Chọn <span class="text-success">Hoa Hướng Dương</span>?</h2>
+                    <p class="text-muted mb-4">@(Model.SchoolInfo?.Description)</p>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-item d-flex align-items-start">
+                                <div class="icon-box bg-success rounded-circle p-3 me-3">
+                                    <i class="fas fa-heart text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Yêu Thương</h6>
+                                    <p class="small text-muted mb-0">Môi trường ấm áp như gia đình</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-item d-flex align-items-start">
+                                <div class="icon-box bg-primary rounded-circle p-3 me-3">
+                                    <i class="fas fa-shield-alt text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">An Toàn</h6>
+                                    <p class="small text-muted mb-0">Cơ sở vật chất đạt chuẩn</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-item d-flex align-items-start">
+                                <div class="icon-box bg-success rounded-circle p-3 me-3">
+                                    <i class="fas fa-lightbulb text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Sáng Tạo</h6>
+                                    <p class="small text-muted mb-0">Phương pháp giáo dục tiên tiến</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="feature-item d-flex align-items-start">
+                                <div class="icon-box bg-info rounded-circle p-3 me-3">
+                                    <i class="fas fa-users text-white"></i>
+                                </div>
+                                <div>
+                                    <h6 class="fw-bold">Chuyên Nghiệp</h6>
+                                    <p class="small text-muted mb-0">Đội ngũ giáo viên giỏi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="/gioi-thieu" class="btn btn-success text-white rounded-pill px-4 mt-3">
+                        Tìm hiểu thêm<i class="fas fa-arrow-right ms-2"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Programs Section *@
+<section class="programs-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">CHƯƠNG TRÌNH HỌC</span>
+            <h2 class="display-6 fw-bold">Các Chương Trình <span class="text-success">Của Chúng Tôi</span></h2>
+        </div>
+        <div class="row">
+            @foreach (var program in Model.FeaturedPrograms)
+            {
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="program-card card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper">
+                            <img src="@(program.ImageUrl ?? $"https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=300&fit=crop")" 
+                                 class="card-img-top" alt="@program.Title" loading="lazy">
+                            <span class="age-badge">@program.AgeGroup</span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@program.Title</h5>
+                            <p class="card-text text-muted">@program.Description</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <a href="/chuong-trinh-hoc/@program.Id/@program.Title.ToLower().Replace(" ", "-")" class="btn btn-outline-success rounded-pill w-100">
+                                Chi tiết<i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@* Teachers Section *@
+<section class="teachers-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">ĐỘI NGŨ GIÁO VIÊN</span>
+            <h2 class="display-6 fw-bold">Gặp Gỡ <span class="text-success">Thầy Cô</span></h2>
+        </div>
+        <div class="row">
+            @foreach (var teacher in Model.FeaturedTeachers)
+            {
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="teacher-card text-center">
+                        <div class="teacher-img-wrapper mx-auto mb-3">
+                            <img src="@(teacher.AvatarUrl ?? $"https://ui-avatars.com/api/?name={teacher.FullName}&background=f0ad4e&color=fff&size=200")" 
+                                 class="rounded-circle img-fluid" alt="@teacher.FullName" loading="lazy">
+                        </div>
+                        <h5 class="fw-bold mb-1">@teacher.FullName</h5>
+                        <p class="text-success mb-2">@teacher.Position</p>
+                        <p class="text-muted small">@teacher.Qualifications</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@* Gallery Section *@
+<section class="gallery-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">THƯ VIỆN ẢNH</span>
+            <h2 class="display-6 fw-bold">Khoảnh Khắc <span class="text-success">Đáng Yêu</span></h2>
+        </div>
+        <div class="row g-3">
+            @foreach (var item in Model.FeaturedGallery)
+            {
+                <div class="col-md-4 col-6">
+                    <div class="gallery-item position-relative overflow-hidden rounded-3">
+                        <img src="@item.ImageUrl" class="img-fluid w-100" alt="@item.Title" loading="lazy">
+                        <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                            <div class="text-center text-white p-3">
+                                <h6 class="mb-1">@item.Title</h6>
+                                <small>@item.Category</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a href="/thu-vien-anh" class="btn btn-success text-white rounded-pill px-4">
+                Xem tất cả<i class="fas fa-images ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+@* Testimonials Section *@
+<section class="testimonials-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">PHẢN HỒI</span>
+            <h2 class="display-6 fw-bold">Phụ Huynh <span class="text-success">Nói Gì</span></h2>
+        </div>
+        <div class="row">
+            @foreach (var testimonial in Model.Testimonials)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="testimonial-card card h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="stars text-success mb-3">
+                                @for (int i = 0; i < testimonial.Rating; i++)
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                            </div>
+                            <p class="card-text fst-italic">"@testimonial.Content"</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            <div class="d-flex align-items-center">
+                                <div class="testimonial-avatar bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    @testimonial.ParentName[0]
+                                </div>
+                                <div>
+                                    <h6 class="mb-0 fw-bold">@testimonial.ParentName</h6>
+                                    @if (!string.IsNullOrEmpty(testimonial.ChildName))
+                                    {
+                                        <small class="text-muted">Phụ huynh bé @testimonial.ChildName</small>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+@* Featured Activities Section *@
+<section class="activities-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">HOẠT ĐỘNG</span>
+            <h2 class="display-6 fw-bold">Các Hoạt Động <span class="text-success">Nổi Bật</span></h2>
+        </div>
+        <div class="row g-4">
+            @foreach (var activity in Model.FeaturedActivities)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper position-relative">
+                            <img src="@(activity.ThumbnailUrl ?? activity.ImageUrl ?? "https://images.unsplash.com/photo-1541692641319-981cc79ee10a?w=400")" 
+                                 class="card-img-top" alt="@activity.Title" loading="lazy" style="height: 200px; object-fit: cover;">
+                            <span class="category-badge position-absolute top-0 start-0 m-2 badge bg-success text-white">@activity.Category</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-meta mb-2 text-muted small">
+                                <i class="far fa-calendar-alt me-1"></i>
+                                @(activity.EventDate?.ToString("dd/MM/yyyy") ?? activity.CreatedAt.ToString("dd/MM/yyyy"))
+                            </div>
+                            <h5 class="card-title fw-bold">@activity.Title</h5>
+                            <p class="card-text text-muted">@activity.Summary</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <a href="/hoat-dong/@activity.Id/@activity.Title.ToLower().Replace(" ", "-")" 
+                               class="btn btn-outline-success rounded-pill w-100">
+                                Xem chi tiết<i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a href="/hoat-dong" class="btn btn-success text-white rounded-pill px-4">
+                Xem tất cả hoạt động<i class="fas fa-running ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+@* Latest News Section *@
+<section class="news-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">TIN TỨC</span>
+            <h2 class="display-6 fw-bold">Tin Tức & <span class="text-success">Thông Báo</span></h2>
+        </div>
+        <div class="row g-4">
+            @foreach (var news in Model.LatestNews)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-card card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper position-relative">
+                            <img src="@(news.ImageUrl ?? "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400")" 
+                                 class="card-img-top" alt="@news.Title" loading="lazy" style="height: 180px; object-fit: cover;">
+                            <span class="category-badge position-absolute top-0 start-0 m-2 badge bg-success text-white">@news.Category</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="news-meta mb-2 text-muted small">
+                                <i class="far fa-calendar-alt me-1"></i>@news.PublishedAt?.ToString("dd/MM/yyyy")
+                                <span class="mx-2">|</span>
+                                <i class="far fa-user me-1"></i>@news.Author
+                            </div>
+                            <h5 class="card-title fw-bold">@news.Title</h5>
+                            <p class="card-text text-muted">@(news.Summary?.Length > 80 ? news.Summary.Substring(0, 80) + "..." : news.Summary)</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <a href="/tin-tuc/@news.Id/@news.Slug" class="btn btn-outline-success rounded-pill w-100">
+                                Đọc thêm<i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="text-center mt-4">
+            <a href="/tin-tuc" class="btn btn-success text-white rounded-pill px-4">
+                Xem tất cả tin tức<i class="fas fa-newspaper ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+@* CTA Section *@
+<section class="cta-section py-5 bg-success">
+    <div class="container text-center">
+        <h2 class="display-6 fw-bold text-white mb-3">Đăng Ký Tham Quan Trường Miễn Phí</h2>
+        <p class="text-white mb-4">Hãy để chúng tôi giới thiệu về môi trường học tập tuyệt vời cho bé yêu của bạn</p>
+        <a href="/lien-he" class="btn btn-light btn-lg rounded-pill px-5 fw-bold">
+            <i class="fas fa-calendar-check me-2"></i>Đặt lịch ngay
+        </a>
+    </div>
+</section>
+
+
+

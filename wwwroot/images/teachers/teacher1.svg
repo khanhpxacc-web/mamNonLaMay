@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <rect fill="#E8F5E9" width="200" height="200"/>
+  <circle cx="100" cy="70" r="40" fill="#4CAF50"/>
+  <rect x="60" y="120" width="80" height="60" rx="10" fill="#2E7D32"/>
+  <text x="100" y="180" font-family="Arial" font-size="14" fill="white" text-anchor="middle">Hiệu Trưởng</text>
+</svg>

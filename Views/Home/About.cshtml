@@ -1,0 +1,178 @@
+@model AboutViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Giới thiệu</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">Giới Thiệu Về Chúng Tôi</h1>
+                <p class="lead text-muted">Tìm hiểu về lịch sử, sứ mệnh và tầm nhìn của Trường Mầm Non Hoa Hướng Dương</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* About Content *@
+<section class="about-detail py-5">
+    <div class="container">
+        <div class="row align-items-center mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?w=600" 
+                     alt="Về chúng tôi" class="img-fluid rounded-4 shadow-lg">
+            </div>
+            <div class="col-lg-6">
+                <span class="text-success fw-bold">CÂU CHUYỆN CỦA CHÚNG TÔI</span>
+                <h2 class="display-6 fw-bold mb-4">Hơn @(DateTime.Now.Year - (Model.SchoolInfo?.EstablishedYear ?? 2010)) Năm Ươm Mầm Tương Lai</h2>
+                <p class="text-muted">@(Model.SchoolInfo?.Description)</p>
+                <p class="text-muted">Được thành lập từ năm @(Model.SchoolInfo?.EstablishedYear ?? 2010), Trường Mầm Non Hoa Hướng Dương đã trở thành mái nhà thứ hai của hàng ngàn em nhỏ, giúp các bé phát triển toàn diện về thể chất, trí tuệ và tâm hồn.</p>
+            </div>
+        </div>
+
+        @* Mission & Vision *@
+        <div class="row mb-5">
+            <div class="col-md-6 mb-4">
+                <div class="mission-card card h-100 border-0 bg-success text-white">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle bg-light text-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px; border: 3px solid white;">
+                                <i class="fas fa-bullseye fa-lg"></i>
+                            </div>
+                            <h4 class="fw-bold mb-0">Sứ Mệnh</h4>
+                        </div>
+                        <p class="mb-0">@(Model.SchoolInfo?.Mission)</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="vision-card card h-100 border-0 bg-primary text-white">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="icon-circle bg-white text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                <i class="fas fa-eye fa-lg"></i>
+                            </div>
+                            <h4 class="fw-bold mb-0">Tầm Nhìn</h4>
+                        </div>
+                        <p class="mb-0">@(Model.SchoolInfo?.Vision)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @* Core Values *@
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h3 class="fw-bold">Giá Trị Cốt Lõi</h3>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="value-card text-center p-4 bg-light rounded-4 h-100">
+                    <div class="value-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-heart fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">Yêu Thương</h5>
+                    <p class="text-muted small mb-0">Yêu thương và tôn trọng từng cá nhân trẻ</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="value-card text-center p-4 bg-light rounded-4 h-100">
+                    <div class="value-icon bg-success text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">An Toàn</h5>
+                    <p class="text-muted small mb-0">Môi trường an toàn, lành mạnh cho trẻ</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="value-card text-center p-4 bg-light rounded-4 h-100">
+                    <div class="value-icon bg-info text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-lightbulb fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">Sáng Tạo</h5>
+                    <p class="text-muted small mb-0">Khuyến khích sự sáng tạo và tò mò</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="value-card text-center p-4 bg-light rounded-4 h-100">
+                    <div class="value-icon bg-danger text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center">
+                        <i class="fas fa-hands-helping fa-2x"></i>
+                    </div>
+                    <h5 class="fw-bold">Hợp Tác</h5>
+                    <p class="text-muted small mb-0">Phối hợp chặt chẽ với phụ huynh</p>
+                </div>
+            </div>
+        </div>
+
+        @* Facilities *@
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h3 class="fw-bold">Cơ Sở Vật Chất</h3>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="facility-card">
+                    <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=400" 
+                         alt="Phòng học" class="img-fluid rounded-3 mb-3" loading="lazy">
+                    <h5 class="fw-bold">Phòng Học Hiện Đại</h5>
+                    <p class="text-muted small">Trang bị đầy đủ tiện nghi, thoáng mát, đầy đủ ánh sáng</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="facility-card">
+                    <img src="https://sukavietnam.com/wp-content/uploads/2023/10/thiet-ke-san-choi-tre-em-an-toan.webp"
+                         alt="Sân chơi" class="img-fluid rounded-3 mb-3" loading="lazy">
+                    <h5 class="fw-bold">Sân Chơi An Toàn</h5>
+                    <p class="text-muted small">Thiết bị vui chơi đạt chuẩn an toàn quốc tế</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="facility-card">
+                    <img src="https://images.unsplash.com/photo-1574966739987-65e38db0f7ce?w=400" 
+                         alt="Phòng ăn" class="img-fluid rounded-3 mb-3" loading="lazy">
+                    <h5 class="fw-bold">Bếp Ăn Vệ Sinh</h5>
+                    <p class="text-muted small">Thực phẩm tươi sạch, đảm bảo dinh dưỡng</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Teachers Section *@
+<section class="teachers-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-success fw-bold">ĐỘI NGŨ GIÁO VIÊN</span>
+            <h2 class="display-6 fw-bold">Gặp Gỡ <span class="text-success">Thầy Cô</span></h2>
+        </div>
+        <div class="row">
+            @foreach (var teacher in Model.Teachers)
+            {
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="teacher-card card h-100 border-0 shadow-sm text-center">
+                        <div class="card-img-wrapper p-4">
+                            <img src="@(teacher.AvatarUrl ?? $"https://ui-avatars.com/api/?name={teacher.FullName}&background=f0ad4e&color=fff&size=200")" 
+                                 class="rounded-circle img-fluid teacher-avatar" alt="@teacher.FullName" loading="lazy">
+                        </div>
+                        <div class="card-body pt-0">
+                            <h5 class="fw-bold mb-1">@teacher.FullName</h5>
+                            <p class="text-success mb-2">@teacher.Position</p>
+                            <p class="text-muted small">@teacher.Qualifications</p>
+                            <p class="card-text small">@teacher.Bio</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+

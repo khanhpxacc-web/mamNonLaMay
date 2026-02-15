@@ -1,0 +1,122 @@
+@model ActivityDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/hoat-dong">Hoạt động</a></li>
+                        <li class="breadcrumb-item active">@Model.Activity?.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Activity Detail *@
+<section class="activity-detail py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <article class="activity-article">
+                    @* Featured Image *@
+                    <img src="@(Model.Activity?.ImageUrl ?? "https://images.unsplash.com/photo-1541692641319-981cc79ee10a?w=800")" 
+                         class="img-fluid rounded-4 shadow-lg mb-4 w-100" alt="@Model.Activity?.Title" loading="lazy">
+
+                    @* Title & Meta *@
+                    <span class="badge bg-success text-white mb-2">@Model.Activity?.Category</span>
+                    <h1 class="fw-bold mb-3">@Model.Activity?.Title</h1>
+                    
+                    <div class="activity-meta d-flex flex-wrap gap-3 text-muted mb-4 pb-3 border-bottom">
+                        <span><i class="far fa-calendar-alt me-2 text-success"></i>
+                            @(Model.Activity?.EventDate?.ToString("dd/MM/yyyy") ?? Model.Activity?.CreatedAt.ToString("dd/MM/yyyy"))
+                        </span>
+                        @if (!string.IsNullOrEmpty(Model.Activity?.Location))
+                        {
+                            <span><i class="fas fa-map-marker-alt me-2 text-success"></i>@Model.Activity.Location</span>
+                        }
+                        <span><i class="far fa-eye me-2 text-success"></i>@Model.Activity?.ViewCount lượt xem</span>
+                    </div>
+
+                    @* Content *@
+                    <div class="activity-content">
+                        <p class="lead">@Model.Activity?.Summary</p>
+                        <div class="content-body">
+                            @Html.Raw(Model.Activity?.Content?.Replace("\n", "<br>"))
+                        </div>
+                    </div>
+
+                    @* Share Buttons *@
+                    <div class="share-section mt-5 pt-4 border-top">
+                        <h6 class="fw-bold mb-3">Chia sẻ hoạt động này:</h6>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="btn btn-info">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="btn btn-success">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="#" class="btn btn-secondary">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            @* Sidebar *@
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    @* Related Activities *@
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-0 pt-3">
+                            <h5 class="fw-bold mb-0">Hoạt động khác</h5>
+                        </div>
+                        <div class="card-body">
+                            @foreach (var related in Model.RelatedActivities.Take(4))
+                            {
+                                <div class="related-item d-flex mb-3">
+                                    <img src="@(related.ThumbnailUrl ?? related.ImageUrl ?? "https://images.unsplash.com/photo-1541692641319-981cc79ee10a?w=100")" 
+                                         class="rounded-3 me-3" style="width: 80px; height: 60px; object-fit: cover;" 
+                                         alt="@related.Title" loading="lazy">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            <a href="/hoat-dong/@related.Id/@related.Title.ToLower().Replace(" ", "-")" 
+                                               class="text-dark text-decoration-none">@related.Title</a>
+                                        </h6>
+                                        <small class="text-muted">@related.Category</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @* CTA Card *@
+                    <div class="card border-0 shadow-sm bg-success text-white">
+                        <div class="card-body text-center p-4">
+                            <i class="fas fa-phone-alt fa-2x mb-3"></i>
+                            <h5 class="fw-bold">Muốn biết thêm?</h5>
+                            <p class="mb-3">Liên hệ với chúng tôi để biết thêm chi tiết về các hoạt động</p>
+                            <a href="/lien-he" class="btn btn-light rounded-pill">Liên hệ ngay</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

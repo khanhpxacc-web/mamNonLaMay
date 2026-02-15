@@ -1,0 +1,166 @@
+@model NewsDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item"><a href="/tin-tuc">Tin tức</a></li>
+                        <li class="breadcrumb-item active">@Model.NewsItem?.Title</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* News Detail *@
+<section class="news-detail py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <article class="news-article">
+                    @* Category & Title *@
+                    <span class="badge bg-success text-white mb-2">@Model.NewsItem?.Category</span>
+                    <h1 class="fw-bold mb-3">@Model.NewsItem?.Title</h1>
+                    
+                    @* Author & Meta *@
+                    <div class="news-meta d-flex flex-wrap align-items-center gap-3 text-muted mb-4 pb-3 border-bottom">
+                        <span class="author">
+                            <i class="far fa-user me-2 text-success"></i>@Model.NewsItem?.Author
+                        </span>
+                        <span><i class="far fa-calendar-alt me-2 text-success"></i>
+                            @(Model.NewsItem?.PublishedAt?.ToString("dd/MM/yyyy HH:mm"))
+                        </span>
+                        <span><i class="far fa-eye me-2 text-success"></i>@Model.NewsItem?.ViewCount lượt xem</span>
+                    </div>
+
+                    @* Featured Image *@
+                    <img src="@(Model.NewsItem?.ImageUrl ?? "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800")" 
+                         class="img-fluid rounded-4 shadow-lg mb-4 w-100" alt="@Model.NewsItem?.Title" loading="lazy">
+
+                    @* Summary *@
+                    <p class="lead fw-bold border-start border-success border-4 ps-3">@Model.NewsItem?.Summary</p>
+
+                    @* Content *@
+                    <div class="news-content">
+                        @Html.Raw(Model.NewsItem?.Content)
+                    </div>
+
+                    @* Tags *@
+                    @if (!string.IsNullOrEmpty(Model.NewsItem?.Tags))
+                    {
+                        <div class="tags-section mt-5">
+                            <h6 class="fw-bold mb-3">Tags:</h6>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach (var tag in Model.NewsItem.Tags.Split(','))
+                                {
+                                    <a href="/tin-tuc?keyword=@tag.Trim()" class="btn btn-outline-secondary btn-sm rounded-pill">@tag.Trim()</a>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    @* Share Buttons *@
+                    <div class="share-section mt-5 pt-4 border-top">
+                        <h6 class="fw-bold mb-3">Chia sẻ bài viết:</h6>
+                        <div class="d-flex gap-2">
+                            <a href="#" class="btn btn-primary">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="btn btn-info">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="btn btn-success">
+                                <i class="fab fa-whatsapp"></i>
+                            </a>
+                            <a href="#" class="btn btn-secondary">
+                                <i class="fas fa-link"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            @* Sidebar *@
+            <div class="col-lg-4">
+                <div class="sidebar">
+                    @* Related News *@
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-0 pt-3">
+                            <h5 class="fw-bold mb-0">Tin tức liên quan</h5>
+                        </div>
+                        <div class="card-body">
+                            @foreach (var related in Model.RelatedNews.Take(5))
+                            {
+                                <div class="related-item d-flex mb-3">
+                                    <img src="@(related.ImageUrl ?? "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=100")" 
+                                         class="rounded-3 me-3" style="width: 80px; height: 60px; object-fit: cover;" 
+                                         alt="@related.Title" loading="lazy">
+                                    <div>
+                                        <h6 class="mb-1">
+                                            <a href="/tin-tuc/@related.Id/@related.Slug" 
+                                               class="text-dark text-decoration-none">@related.Title</a>
+                                        </h6>
+                                        <small class="text-muted">@related.PublishedAt?.ToString("dd/MM/yyyy")</small>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @* Categories *@
+                    <div class="card border-0 shadow-sm mb-4">
+                        <div class="card-header bg-white border-0 pt-3">
+                            <h5 class="fw-bold mb-0">Danh mục</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="/tin-tuc" class="btn btn-outline-dark btn-sm rounded-pill">Tất cả</a>
+                                <a href="/tin-tuc?category=Thông báo" class="btn btn-outline-success btn-sm rounded-pill">Thông báo</a>
+                                <a href="/tin-tuc?category=Tin tức" class="btn btn-outline-success btn-sm rounded-pill">Tin tức</a>
+                                <a href="/tin-tuc?category=Kiến thức" class="btn btn-outline-success btn-sm rounded-pill">Kiến thức</a>
+                                <a href="/tin-tuc?category=Sự kiện" class="btn btn-outline-success btn-sm rounded-pill">Sự kiện</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    @* Newsletter *@
+                    <div class="card border-0 shadow-sm bg-light">
+                        <div class="card-body text-center p-4">
+                            <i class="far fa-envelope fa-2x text-success mb-3"></i>
+                            <h5 class="fw-bold">Đăng ký nhận tin</h5>
+                            <p class="small text-muted mb-3">Nhận thông báo về tin tức và sự kiện mới nhất</p>
+                            <form class="newsletter-form">
+                                <input type="email" class="form-control mb-2" placeholder="Email của bạn">
+                                <button type="submit" class="btn btn-success text-white w-100 rounded-pill">Đăng ký</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Navigation *@
+<section class="news-navigation py-4 bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <a href="/tin-tuc" class="btn btn-outline-dark rounded-pill">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại tin tức
+            </a>
+        </div>
+    </div>
+</section>
+
+
+

@@ -1,0 +1,98 @@
+@model ActivitiesViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Hoạt động</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">Hoạt Động Củа Trường</h1>
+                <p class="lead text-muted">Khám phá các hoạt động phong phú, sôi nổi tại Hoa Hướng Dương</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Filter *@
+<section class="activity-filter py-4">
+    <div class="container">
+        <div class="d-flex justify-content-center flex-wrap gap-2">
+            <a href="/hoat-dong" class="btn @(string.IsNullOrEmpty(Model.SelectedCategory) ? "btn-success text-white" : "btn-outline-dark") rounded-pill">
+                Tất cả
+            </a>
+            @foreach (var category in Model.Categories)
+            {
+                <a href="/hoat-dong?category=@category" 
+                   class="btn @(Model.SelectedCategory == category ? "btn-success text-white" : "btn-outline-dark") rounded-pill">
+                    @category
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+@* Activities Grid *@
+<section class="activities-grid py-5">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var activity in Model.Activities)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="activity-card card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper position-relative">
+                            <img src="@(activity.ThumbnailUrl ?? activity.ImageUrl ?? "https://images.unsplash.com/photo-1541692641319-981cc79ee10a?w=400")" 
+                                 class="card-img-top" alt="@activity.Title" loading="lazy">
+                            <span class="category-badge position-absolute top-0 start-0 m-2 badge bg-success text-white">@activity.Category</span>
+                            @if (activity.IsFeatured)
+                            {
+                                <span class="featured-badge position-absolute top-0 end-0 m-2 badge bg-danger">
+                                    <i class="fas fa-star me-1"></i>Nổi bật
+                                </span>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <div class="activity-meta mb-2 text-muted small">
+                                <i class="far fa-calendar-alt me-1"></i>
+                                @(activity.EventDate?.ToString("dd/MM/yyyy") ?? activity.CreatedAt.ToString("dd/MM/yyyy"))
+                                <span class="mx-2">|</span>
+                                <i class="far fa-eye me-1"></i>@activity.ViewCount lượt xem
+                            </div>
+                            <h5 class="card-title fw-bold">@activity.Title</h5>
+                            <p class="card-text text-muted">@activity.Summary</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <a href="/hoat-dong/@activity.Id/@activity.Title.ToLower().Replace(" ", "-")" 
+                               class="btn btn-outline-success rounded-pill w-100">
+                                Xem chi tiết<i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@* CTA Section *@
+<section class="cta-section py-5 bg-light">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3">Muốn Con Tham Gia Các Hoạt Động?</h3>
+        <p class="text-muted mb-4">Đăng ký học ngay để con được trải nghiệm môi trường sôi động tại Hoa Hướng Dương</p>
+        <a href="/lien-he" class="btn btn-success btn-lg rounded-pill px-5 text-white">
+            <i class="fas fa-edit me-2"></i>Đăng ký ngay
+        </a>
+    </div>
+</section>
+
+
+

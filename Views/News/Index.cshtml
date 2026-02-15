@@ -1,0 +1,140 @@
+@model NewsViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Tin tức</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">Tin Tức & Bài Viết</h1>
+                <p class="lead text-muted">Cập nhật thông tin mới nhất từ Trường Mầm Non Hoa Hướng Dương</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Search & Filter *@
+<section class="news-filter py-4">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <form method="get" action="/tin-tuc" class="search-form mb-3">
+                    <div class="input-group input-group-lg">
+                        <input type="text" name="keyword" class="form-control" placeholder="Tìm kiếm tin tức..." 
+                               value="@Model.Keyword">
+                        <button type="submit" class="btn btn-success text-white">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+                <div class="d-flex justify-content-center flex-wrap gap-2">
+                    <a href="/tin-tuc" class="btn @(string.IsNullOrEmpty(Model.SelectedCategory) ? "btn-success text-white" : "btn-outline-dark") rounded-pill">
+                        Tất cả
+                    </a>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <a href="/tin-tuc?category=@category" 
+                           class="btn @(Model.SelectedCategory == category ? "btn-success text-white" : "btn-outline-dark") rounded-pill">
+                            @category
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Featured News (if no filter) *@
+@if (string.IsNullOrEmpty(Model.SelectedCategory) && string.IsNullOrEmpty(Model.Keyword))
+{
+    var featuredNews = Model.News.Where(n => n.IsFeatured).Take(1).FirstOrDefault();
+    if (featuredNews != null)
+    {
+        <section class="featured-news py-4">
+            <div class="container">
+                <div class="card border-0 shadow-lg overflow-hidden">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <img src="@(featuredNews.ImageUrl ?? "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800")" 
+                                 class="img-fluid h-100 w-100 object-fit-cover" alt="@featuredNews.Title" style="min-height: 300px;">
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card-body p-4 p-lg-5 d-flex flex-column justify-content-center h-100">
+                                <span class="badge bg-success text-white mb-2 align-self-start">@featuredNews.Category</span>
+                                <h2 class="card-title fw-bold mb-3">@featuredNews.Title</h2>
+                                <p class="card-text text-muted mb-4">@featuredNews.Summary</p>
+                                <div class="news-meta text-muted small mb-3">
+                                    <i class="far fa-user me-1"></i>@featuredNews.Author
+                                    <span class="mx-2">|</span>
+                                    <i class="far fa-calendar-alt me-1"></i>@featuredNews.PublishedAt?.ToString("dd/MM/yyyy")
+                                    <span class="mx-2">|</span>
+                                    <i class="far fa-eye me-1"></i>@featuredNews.ViewCount lượt xem
+                                </div>
+                                <a href="/tin-tuc/@featuredNews.Id/@featuredNews.Slug" class="btn btn-success text-white rounded-pill align-self-start">
+                                    Đọc tiếp<i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    }
+}
+
+@* News Grid *@
+<section class="news-grid py-5">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var newsItem in Model.News)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="news-card card h-100 border-0 shadow-sm">
+                        <div class="card-img-wrapper position-relative">
+                            <img src="@(newsItem.ImageUrl ?? "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400")" 
+                                 class="card-img-top" alt="@newsItem.Title" loading="lazy" style="height: 200px; object-fit: cover;">
+                            <span class="category-badge position-absolute top-0 start-0 m-2 badge bg-success text-white">@newsItem.Category</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="news-meta mb-2 text-muted small">
+                                <i class="far fa-calendar-alt me-1"></i>@newsItem.PublishedAt?.ToString("dd/MM/yyyy")
+                                <span class="mx-2">|</span>
+                                <i class="far fa-eye me-1"></i>@newsItem.ViewCount
+                            </div>
+                            <h5 class="card-title fw-bold">@newsItem.Title</h5>
+                            <p class="card-text text-muted">@(newsItem.Summary?.Length > 100 ? newsItem.Summary.Substring(0, 100) + "..." : newsItem.Summary)</p>
+                        </div>
+                        <div class="card-footer bg-transparent border-0 pb-3">
+                            <a href="/tin-tuc/@newsItem.Id/@newsItem.Slug" class="btn btn-outline-success rounded-pill w-100">
+                                Đọc thêm<i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        @if (!Model.News.Any())
+        {
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4>Không tìm thấy tin tức nào</h4>
+                <p class="text-muted">Vui lòng thử tìm kiếm với từ khóa khác</p>
+                <a href="/tin-tuc" class="btn btn-success text-white rounded-pill">Xem tất cả tin tức</a>
+            </div>
+        }
+    </div>
+</section>
+
+
+

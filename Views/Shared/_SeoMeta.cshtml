@@ -1,0 +1,35 @@
+@model SeoViewModel
+
+@* SEO Meta Tags *@
+<meta name="description" content="@Model.MetaDescription" />
+<meta name="keywords" content="@Model.MetaKeywords" />
+<meta name="robots" content="index, follow" />
+<meta name="author" content="Trường Mầm Non Lá Mây" />
+<meta name="language" content="Vietnamese" />
+<link rel="canonical" href="@Model.CanonicalUrl" />
+
+@* Open Graph Meta Tags *@
+<meta property="og:title" content="@Model.OgTitle" />
+<meta property="og:description" content="@Model.OgDescription" />
+<meta property="og:image" content="@Model.OgImage" />
+<meta property="og:url" content="@Model.CanonicalUrl" />
+<meta property="og:type" content="@Model.OgType" />
+<meta property="og:locale" content="vi_VN" />
+<meta property="og:site_name" content="Trường Mầm Non Hoa Hướng Dương" />
+
+@* Twitter Card Meta Tags *@
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="@Model.OgTitle" />
+<meta name="twitter:description" content="@Model.OgDescription" />
+<meta name="twitter:image" content="@Model.OgImage" />
+
+@* Structured Data (JSON-LD) *@
+@if (!string.IsNullOrEmpty(Model.StructuredData))
+{
+    <script type="application/ld+json">
+        @Html.Raw(Model.StructuredData)
+    </script>
+}
+
+
+

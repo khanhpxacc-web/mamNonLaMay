@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect fill="linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%)" width="1200" height="630"/>
+  <rect fill="#2E7D32" width="1200" height="630"/>
+  <circle cx="200" cy="150" r="80" fill="#4CAF50" opacity="0.5"/>
+  <circle cx="1000" cy="500" r="100" fill="#66BB6A" opacity="0.5"/>
+  <text x="600" y="280" font-family="Arial" font-size="72" fill="white" text-anchor="middle" font-weight="bold">Trường Mầm Non Lá Mây</text>
+  <text x="600" y="380" font-family="Arial" font-size="36" fill="#E8F5E9" text-anchor="middle">Nơi ươm mầm tương lai cho trẻ em Việt Nam</text>
+  <text x="600" y="480" font-family="Arial" font-size="28" fill="#C8E6C9" text-anchor="middle">📍 170 Mạc Quyết, Hải Phòng | 📞 0964106259</text>
+</svg>

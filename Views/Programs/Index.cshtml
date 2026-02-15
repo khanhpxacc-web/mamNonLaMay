@@ -1,0 +1,82 @@
+@model ProgramsViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Chương trình học</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">Chương Trình Học</h1>
+                <p class="lead text-muted">Các chương trình giáo dục chất lượng cao phù hợp với từng độ tuổi</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Programs List *@
+<section class="programs-list py-5">
+    <div class="container">
+        <div class="row">
+            @foreach (var program in Model.Programs)
+            {
+                <div class="col-lg-6 mb-4">
+                    <div class="program-detail-card card border-0 shadow-sm h-100">
+                        <div class="row g-0 h-100">
+                            <div class="col-md-5">
+                                <img src="@(program.ImageUrl ?? $"https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&h=500&fit=crop")" 
+                                     class="img-fluid rounded-start h-100 object-fit-cover" alt="@program.Title" loading="lazy">
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body d-flex flex-column h-100">
+                                    <span class="badge bg-success text-white mb-2 align-self-start">@program.AgeGroup</span>
+                                    <h5 class="card-title fw-bold">@program.Title</h5>
+                                    <p class="card-text text-muted flex-grow-1">@program.Description</p>
+                                    <ul class="list-unstyled mb-3">
+                                        <li><i class="fas fa-clock text-success me-2"></i>@program.Schedule</li>
+                                        <li><i class="fas fa-calendar-alt text-success me-2"></i>@program.Duration buổi/tuần</li>
+                                        @if (program.Price.HasValue)
+                                        {
+                                            <li><i class="fas fa-tag text-success me-2"></i>@program.Price.Value.ToString("N0") đ/tháng</li>
+                                        }
+                                    </ul>
+                                    <a href="/chuong-trinh-hoc/@program.Id/@program.Title.ToLower().Replace(" ", "-")" 
+                                       class="btn btn-success text-white rounded-pill">
+                                        Xem chi tiết<i class="fas fa-arrow-right ms-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@* CTA Section *@
+<section class="cta-section py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 text-center">
+                <h3 class="fw-bold mb-3">Bạn Cần Tư Vấn Chương Trình Phù Hợp?</h3>
+                <p class="text-muted mb-4">Hãy để chúng tôi giúp bạn chọn chương trình phù hợp nhất cho bé yêu của bạn</p>
+                <a href="/lien-he" class="btn btn-success btn-lg rounded-pill px-5 text-white">
+                    <i class="fas fa-phone-alt me-2"></i>Liên hệ tư vấn
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+

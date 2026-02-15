@@ -1,0 +1,104 @@
+@model GalleryViewModel
+
+@{
+    ViewData["Title"] = Model.Seo.Title;
+    ViewData["Seo"] = Model.Seo;
+}
+
+@* Page Header *@
+<section class="page-header py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-center mb-3">
+                        <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+                        <li class="breadcrumb-item active">Thư viện ảnh</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold">Thư Viện Ảnh</h1>
+                <p class="lead text-muted">Những khoảnh khắc đáng yêu và đáng nhớ của các bé tại trường</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* Gallery Filter *@
+<section class="gallery-filter py-4">
+    <div class="container">
+        <div class="d-flex justify-content-center flex-wrap gap-2">
+            <a href="/thu-vien-anh" class="btn @(string.IsNullOrEmpty(Model.SelectedCategory) ? "btn-success text-white" : "btn-outline-dark") rounded-pill">
+                Tất cả
+            </a>
+            @foreach (var category in Model.Categories)
+            {
+                <a href="/thu-vien-anh?category=@category" 
+                   class="btn @(Model.SelectedCategory == category ? "btn-success text-white" : "btn-outline-dark") rounded-pill">
+                    @category
+                </a>
+            }
+        </div>
+    </div>
+</section>
+
+@* Gallery Grid *@
+<section class="gallery-grid py-5">
+    <div class="container">
+        <div class="row g-4">
+            @foreach (var item in Model.GalleryItems)
+            {
+                <div class="col-lg-4 col-md-6 gallery-item-wrapper" data-category="@item.Category">
+                    <div class="gallery-item-card position-relative overflow-hidden rounded-4 shadow-sm">
+                        <img src="@item.ImageUrl" 
+                             class="img-fluid w-100 gallery-img" 
+                             alt="@item.Title" 
+                             loading="lazy"
+                             data-bs-toggle="modal" 
+                             data-bs-target="#galleryModal"
+                             data-img="@item.ImageUrl"
+                             data-title="@item.Title"
+                             data-desc="@item.Description">
+                        <div class="gallery-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center text-white p-3">
+                            <span class="badge bg-success mb-2">@item.Category</span>
+                            <h6 class="fw-bold">@item.Title</h6>
+                            <p class="small mb-0 text-center">@item.Description</p>
+                            <i class="fas fa-search-plus fa-2x mt-2"></i>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+@* Gallery Modal *@
+<div class="modal fade" id="galleryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 bg-transparent">
+            <div class="modal-body p-0">
+                <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 z-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                <img src="" id="modalImage" class="img-fluid rounded-4" alt="">
+                <div class="bg-white rounded-bottom-4 p-3">
+                    <h5 id="modalTitle" class="fw-bold mb-1"></h5>
+                    <p id="modalDesc" class="text-muted mb-0"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Gallery modal
+        document.querySelectorAll('.gallery-item-card img').forEach(img => {
+            img.addEventListener('click', function() {
+                document.getElementById('modalImage').src = this.dataset.img;
+                document.getElementById('modalTitle').textContent = this.dataset.title;
+                document.getElementById('modalDesc').textContent = this.dataset.desc;
+            });
+        });
+    </script>
+}
+
+
+

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    
+    @* SEO Meta Tags từ Partial View *@
+    @if (ViewData["Seo"] is SeoViewModel seoModel)
+    {
+        <partial name="_SeoMeta" model="seoModel" />
+    }
+    
+    @* Favicon *@
+    <link rel="icon" type="image/png" href="~/images/favicon.png" />
+    <link rel="apple-touch-icon" href="~/images/apple-touch-icon.png" />
+    
+    @* CSS *@
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+    
+    @* Preconnect for performance *@
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+</head>
+<body>
+    @* Navigation *@
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-leaf text-success me-2"></i>
+                <span class="brand-text">Mầm Non<span class="text-success">Lá Mây</span></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="About">Giới thiệu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Programs" asp-action="Index">Chương trình học</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Activities" asp-action="Index">Hoạt động</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="News" asp-action="Index">Tin tức</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Gallery" asp-action="Index">Thư viện ảnh</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-success text-white px-3 ms-2 rounded-pill" asp-controller="Contact" asp-action="Index">
+                            <i class="fas fa-phone-alt me-1"></i>Liên hệ
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @* Main Content *@
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    @* Footer with Map *@
+    <footer class="footer bg-dark text-white pt-5 pb-3">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5 class="mb-3"><i class="fas fa-leaf text-success me-2"></i>Lá Mây</h5>
+                    <p class="text-light">Nơi ươm mầm tương lai cho trẻ em Việt Nam. Chúng tôi cam kết mang đến môi trường học tập an toàn, thân thiện và sáng tạo.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="fab fa-facebook-f fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-youtube fa-lg"></i></a>
+                        <a href="#" class="text-white me-3"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-tiktok fa-lg"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h6 class="text-success mb-3">Liên kết</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/" class="text-light text-decoration-none">Trang chủ</a></li>
+                        <li class="mb-2"><a href="/gioi-thieu" class="text-light text-decoration-none">Giới thiệu</a></li>
+                        <li class="mb-2"><a href="/chuong-trinh-hoc" class="text-light text-decoration-none">Chương trình</a></li>
+                        <li class="mb-2"><a href="/hoat-dong" class="text-light text-decoration-none">Hoạt động</a></li>
+                        <li class="mb-2"><a href="/tin-tuc" class="text-light text-decoration-none">Tin tức</a></li>
+                        <li class="mb-2"><a href="/thu-vien-anh" class="text-light text-decoration-none">Thư viện ảnh</a></li>
+                        <li class="mb-2"><a href="/lien-he" class="text-light text-decoration-none">Liên hệ</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h6 class="text-success mb-3">Chương trình học</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/chuong-trinh-hoc" class="text-light text-decoration-none">Nhà trẻ (1-2 tuổi)</a></li>
+                        <li class="mb-2"><a href="/chuong-trinh-hoc" class="text-light text-decoration-none">Mẫu giáo nhỡ (3-4 tuổi)</a></li>
+                        <li class="mb-2"><a href="/chuong-trinh-hoc" class="text-light text-decoration-none">Mẫu giáo lớn (5-6 tuổi)</a></li>
+                        <li class="mb-2"><a href="/chuong-trinh-hoc" class="text-light text-decoration-none">Lớp năng khiếu</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h6 class="text-success mb-3">Bản đồ chỉ đường</h6>
+                    <div class="map-container rounded-3 overflow-hidden" style="height: 200px;">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.757843467267!2d106.6985012!3d20.819197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314a7012bc1dbe29%3A0x19066bd16a795a5f!2zMTcwIE3huqFjIFF1eeG6v3QsIEFuaCBExrDGoW5nLCBExrDGoW5nIEtpbmgsIEjhuqNpIFBow7JuZywgVmnhu4d0IE5hbQ!5e0!3m2!1svi!2s!4v1707900000000!5m2!1svi!2s"
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                    <ul class="list-unstyled text-light mt-3">
+                        <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-success"></i>170 Mạc Quyết, Anh Dũng, Dương Kinh, Hải Phòng</li>
+                        <li class="mb-2"><i class="fas fa-phone-alt me-2 text-success"></i>0964106259</li>
+                        <li class="mb-2"><i class="fas fa-envelope me-2 text-success"></i>info@mamnonlamay.edu.vn</li>
+                        <li class="mb-2"><i class="fas fa-clock me-2 text-success"></i>Thứ 2 - Thứ 6: 7:00 - 17:00</li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4 border-secondary">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0 text-light">&copy; @DateTime.Now.Year Trường Mầm Non Lá Mây. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="/sitemap.xml" class="text-light text-decoration-none me-3">Sitemap</a>
+                    <a href="#" class="text-light text-decoration-none">Chính sách bảo mật</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    @* Back to Top Button *@
+    <button id="backToTop" class="btn btn-success rounded-circle shadow" style="display: none;">
+        <i class="fas fa-arrow-up text-white"></i>
+    </button>
+
+    @* Scripts *@
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+
+
