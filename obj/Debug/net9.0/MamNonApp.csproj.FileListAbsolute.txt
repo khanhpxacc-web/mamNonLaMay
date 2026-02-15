@@ -103,3 +103,5 @@ D:\BatHanh\MamNonApp\obj\Debug\net9.0\compressed\qwxsmqqz61-p5crsrjbmn.gz
 D:\BatHanh\MamNonApp\obj\Debug\net9.0\compressed\btwyx10y9f-excpqgireb.gz
 D:\BatHanh\MamNonApp\obj\Debug\net9.0\compressed\x034wsjr22-m97nl70ive.gz
 D:\BatHanh\MamNonApp\obj\Debug\net9.0\compressed\6oadmmx5h3-2ykw9rcu2p.gz
+D:\BatHanh\MamNonApp\obj\Debug\net9.0\MamNonApp.sourcelink.json
+D:\BatHanh\MamNonApp\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
