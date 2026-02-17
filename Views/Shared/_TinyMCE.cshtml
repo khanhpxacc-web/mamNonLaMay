@@ -1,0 +1,112 @@
+@model string
+
+@{
+    var textareaId = ViewData["TextareaId"] as string ?? "Content";
+    var height = ViewData["Height"] as int? ?? 400;
+}
+
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+    (function() {
+        // Lấy token từ form nếu có
+        function getAntiForgeryToken() {
+            var tokenInput = document.querySelector('input[name="__RequestVerificationToken"]');
+            return tokenInput ? tokenInput.value : '';
+        }
+        
+        tinymce.init({
+            selector: '#@(textareaId)',
+            height: @(height),
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: 'undo redo | blocks | ' +
+                'bold italic forecolor | alignleft aligncenter ' +
+                'alignright alignjustify | bullist numlist outdent indent | ' +
+                'image media table | removeformat | help',
+            
+            // Cấu hình upload ảnh từ toolbar
+            images_upload_url: '/admin/upload-image',
+            images_upload_handler: function (blobInfo, progress) {
+                return new Promise(function(resolve, reject) {
+                    var xhr = new XMLHttpRequest();
+                    var formData = new FormData();
+                    
+                    xhr.open('POST', '/admin/upload-image');
+                    
+                    // Thêm AntiForgery token
+                    var token = getAntiForgeryToken();
+                    if (token) {
+                        xhr.setRequestHeader('RequestVerificationToken', token);
+                    }
+                    
+                    xhr.onload = function() {
+                        if (xhr.status < 200 || xhr.status >= 300) {
+                            reject('HTTP Error: ' + xhr.status);
+                            return;
+                        }
+                        
+                        var json;
+                        try {
+                            json = JSON.parse(xhr.responseText);
+                        } catch (e) {
+                            reject('Invalid JSON: ' + xhr.responseText);
+                            return;
+                        }
+                        
+                        if (!json || typeof json.location !== 'string') {
+                            reject('Invalid response: ' + xhr.responseText);
+                            return;
+                        }
+                        
+                        resolve(json.location);
+                    };
+                    
+                    xhr.onerror = function() {
+                        reject('Upload failed due to network error');
+                    };
+                    
+                    formData.append('file', blobInfo.blob(), blobInfo.filename());
+                    xhr.send(formData);
+                });
+            },
+            
+            // Hỗ trợ paste ảnh trực tiếp
+            paste_data_images: true,
+            
+            // Cấu hình file picker
+            file_picker_types: 'image',
+            file_picker_callback: function(cb, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('accept', 'image/*');
+                
+                input.onchange = function() {
+                    var file = this.files[0];
+                    
+                    var reader = new FileReader();
+                    reader.onload = function() {
+                        var id = 'blobid' + new Date().getTime();
+                        var blobCache = tinymce.activeEditor.editorUpload.blobCache;
+                        var base64 = reader.result.split(',')[1];
+                        var blobInfo = blobCache.create(id, file, base64);
+                        blobCache.add(blobInfo);
+                        
+                        cb(blobInfo.blobUri(), { title: file.name });
+                    };
+                    reader.readAsDataURL(file);
+                };
+                
+                input.click();
+            },
+            
+            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 16px; line-height: 1.6; } img { max-width: 100%; height: auto; }',
+            
+            // Ngôn ngữ
+            language_url: 'https://cdn.jsdelivr.net/npm/tinymce-i18n@23/langs/vi.min.js',
+            language: 'vi'
+        });
+    })();
+</script>

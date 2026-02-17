@@ -1,11 +1,54 @@
+using MamNonApp.Data;
 using MamNonApp.Interfaces;
 using MamNonApp.Repositories;
 using MamNonApp.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// ============================================
+// DATABASE CONFIGURATION - SQLite for Development
+// ============================================
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(connectionString));
+
+// ============================================
+// IDENTITY CONFIGURATION
+// ============================================
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    // Password settings
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    
+    // Lockout settings
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+    
+    // User settings
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
+
+// Configure Application Cookies
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Admin/Login";
+    options.LogoutPath = "/Admin/Logout";
+    options.AccessDeniedPath = "/Admin/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    options.SlidingExpiration = true;
+});
 
 // ============================================
 // DEPENDENCY INJECTION CONFIGURATION
@@ -24,6 +67,7 @@ builder.Services.AddScoped<ISchoolInfoService, SchoolInfoService>();
 builder.Services.AddScoped<ISeoService, SeoService>();
 builder.Services.AddScoped<IActivityService, ActivityService>();
 builder.Services.AddScoped<INewsService, NewsService>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
 // Add Response Caching for SEO performance
 builder.Services.AddResponseCaching();
@@ -70,6 +114,8 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.UseRouting();
 
+// Authentication & Authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
 // SEO-Friendly Routes
@@ -139,9 +185,69 @@ app.MapControllerRoute(
     constraints: new { id = @"\d+" }
 );
 
+// Admin route
+app.MapControllerRoute(
+    name: "admin",
+    pattern: "admin/{action=Index}/{id?}",
+    defaults: new { controller = "Admin" });
+
 // Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Initialize Database and Seed Admin User
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+        var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+        
+        // Apply migrations
+        await context.Database.MigrateAsync();
+        
+        // Seed admin user
+        await SeedAdminUser(userManager, roleManager);
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while seeding the database.");
+    }
+}
+
 app.Run();
+
+// Seed Admin User
+static async Task SeedAdminUser(UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
+{
+    // Create Admin role if not exists
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // Create default admin user if not exists
+    var adminEmail = "admin@mamnonlamay.edu.vn";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    
+    if (adminUser == null)
+    {
+        adminUser = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin@123");
+        
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}

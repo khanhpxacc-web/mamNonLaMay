@@ -1,0 +1,72 @@
+@model EducationProgram
+
+@{
+    ViewData["Title"] = "Thêm Chương trình học";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Thêm chương trình học mới</h5>
+    <a href="/admin/programs" class="btn btn-admin-outline">
+        <i class="fas fa-arrow-left me-2"></i>Quay lại
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form asp-action="CreateProgram" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    <label asp-for="Title" class="form-label fw-bold">Tiêu đề <span class="text-danger">*</span></label>
+                    <input asp-for="Title" class="form-control form-control-lg" placeholder="Nhập tiêu đề chương trình" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label asp-for="AgeGroup" class="form-label fw-bold">Độ tuổ <span class="text-danger">*</span></label>
+                    <input asp-for="AgeGroup" class="form-control" placeholder="VD: 3-4 tuổ" />
+                    <span asp-validation-for="AgeGroup" class="text-danger"></span>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Schedule" class="form-label fw-bold">Lịch học</label>
+                    <input asp-for="Schedule" class="form-control" placeholder="VD: Thứ 2-6, 7:30-16:30" />
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Price" class="form-label fw-bold">Học phí (VNĐ/tháng)</label>
+                    <input asp-for="Price" type="number" class="form-control" placeholder="VD: 3500000" />
+                </div>
+            </div>
+            
+            @await Html.PartialAsync("_ImageUpload", "", new ViewDataDictionary(ViewData) { { "InputId", "ImageUrl" }, { "InputName", "ImageUrl" }, { "Label", "Ảnh đại diện" } })
+            
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-bold">Mô tả ngắn</label>
+                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mô tả ngắn gọn về chương trình..."></textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label asp-for="Content" class="form-label fw-bold">Nội dung chi tiết</label>
+                <textarea asp-for="Content" id="Content" class="form-control" rows="10" placeholder="Nhập nội dung chi tiết về chương trình học..."></textarea>
+                <div class="form-text">Có thể nhập ảnh trực tiếp vào nội dung bằng cách copy-paste hoặc dùng nút Insert Image</div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-admin px-4">
+                    <i class="fas fa-save me-2"></i>Lưu
+                </button>
+                <a href="/admin/programs" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @await Html.PartialAsync("_RichTextEditor", "", new ViewDataDictionary(ViewData) { { "TextareaId", "Content" }, { "Height", 400 } })
+}

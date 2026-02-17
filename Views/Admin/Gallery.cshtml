@@ -1,0 +1,103 @@
+@model PaginatedList<GalleryItem>
+
+@{
+    ViewData["Title"] = "Quản lý Thư viện ảnh";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Thư viện ảnh</h5>
+    <a href="/admin/gallery/create" class="btn btn-admin">
+        <i class="fas fa-plus me-2"></i>Thêm ảnh
+    </a>
+</div>
+
+<!-- Filter Form -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control" placeholder="Tìm theo tiêu đề..." value="@ViewBag.Search">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="category" class="form-select">
+                    <option value="">-- Tất cả danh mục --</option>
+                    @foreach (var cat in ViewBag.Categories ?? new List<string>())
+                    {
+                        <option value="@cat" selected="@(ViewBag.Category == cat)">@cat</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-admin-outline flex-fill">
+                        <i class="fas fa-filter me-1"></i>Lọc
+                    </button>
+                    @if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.Category))
+                    {
+                        <a href="/admin/gallery" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Count -->
+@if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.Category))
+{
+    <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <span>
+            <i class="fas fa-info-circle me-2"></i>
+            Tìm thấy <strong>@Model.Count</strong> kết quả
+        </span>
+        <a href="/admin/gallery" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-times me-1"></i>Xóa bộ lọc
+        </a>
+    </div>
+}
+
+<div class="row g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-6 col-lg-4 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <img src="@item.ImageUrl" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.Title" />
+                <div class="card-body">
+                    <h6 class="card-title fw-bold mb-1">@item.Title</h6>
+                    <span class="badge bg-success">@item.Category</span>
+                    <p class="card-text small text-muted mt-2 mb-0">
+                        @(item.Description?.Length > 60 ? item.Description.Substring(0, 60) + "..." : item.Description)
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-0">
+                    <form asp-action="DeleteGallery" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa ảnh này?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger w-100">
+                            <i class="fas fa-trash me-1"></i>Xóa
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Pagination -->
+<div class="mt-4">
+    @await Html.PartialAsync("_Pagination", Model)
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-images fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Chưa có ảnh nào trong thư viện</p>
+        <a href="/admin/gallery/create" class="btn btn-admin">Thêm ảnh đầu tiên</a>
+    </div>
+}

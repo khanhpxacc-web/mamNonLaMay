@@ -1,0 +1,126 @@
+@model string
+
+@{
+    var textareaId = ViewData["TextareaId"] as string ?? "Content";
+    var height = ViewData["Height"] as int? ?? 400;
+}
+
+<!-- Summernote CSS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+<style>
+    .note-editor {
+        border: 1px solid #ced4da !important;
+        border-radius: 0.375rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .note-editor .note-toolbar {
+        background: #f8f9fa;
+        border-bottom: 1px solid #ced4da;
+        padding: 10px;
+    }
+    
+    .note-editor .note-editable {
+        background: white;
+        min-height: @(height)px;
+    }
+    
+    .note-editor .note-editable img {
+        max-width: 100%;
+        height: auto;
+    }
+    
+    .note-btn {
+        border-radius: 0.25rem;
+    }
+    
+    .note-btn-primary {
+        background: #2E7D32 !important;
+        border-color: #2E7D32 !important;
+    }
+    
+    .note-dropdown-menu {
+        border-radius: 0.375rem;
+    }
+</style>
+
+<script>
+    (function() {
+        function initSummernote() {
+            var $editor = $('#@(textareaId)');
+            if (!$editor.length) return;
+            
+            // Destroy nếu đã khởi tạo
+            if ($editor.hasClass('note-editor')) {
+                $editor.summernote('destroy');
+            }
+            
+            $editor.summernote({
+                height: @(height),
+                placeholder: 'Nhập nội dung tại đây...',
+                
+                toolbar: [
+                    ['style', ['bold', 'italic', 'underline', 'clear']],
+                    ['font', ['strikethrough', 'superscript', 'subscript']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['insert', ['link', 'picture', 'video']],
+                    ['view', ['fullscreen', 'codeview']]
+                ],
+                
+                // Cấu hình upload ảnh
+                callbacks: {
+                    onImageUpload: function(files) {
+                        for (let i = 0; i < files.length; i++) {
+                            uploadImage(files[i], this);
+                        }
+                    }
+                },
+                
+                popover: {
+                    image: [
+                        ['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+                        ['float', ['floatLeft', 'floatRight', 'floatNone']],
+                        ['remove', ['removeMedia']]
+                    ]
+                }
+            });
+        }
+        
+        // Hàm upload ảnh
+        function uploadImage(file, editor) {
+            var formData = new FormData();
+            formData.append('file', file);
+            
+            $.ajax({
+                url: '/admin/upload-image',
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    if (data.location) {
+                        $(editor).summernote('insertImage', data.location);
+                    } else {
+                        alert('Upload ảnh thất bại');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Upload error:', error);
+                    alert('Lỗi upload ảnh: ' + error);
+                }
+            });
+        }
+        
+        // Khởi tạo khi DOM sẵn sàng
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initSummernote);
+        } else {
+            initSummernote();
+        }
+    })();
+</script>

@@ -1,0 +1,141 @@
+@model PaginatedList<News>
+
+@{
+    ViewData["Title"] = "Quản lý Tin tức";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Danh sách tin tức</h5>
+    <a href="/admin/news/create" class="btn btn-admin">
+        <i class="fas fa-plus me-2"></i>Thêm mới
+    </a>
+</div>
+
+<!-- Filter Form -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control" placeholder="Tìm theo tiêu đề..." value="@ViewBag.Search">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="category" class="form-select">
+                    <option value="">-- Tất cả danh mục --</option>
+                    @foreach (var cat in ViewBag.Categories ?? new List<string>())
+                    {
+                        <option value="@cat" selected="@(ViewBag.Category == cat)">@cat</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="author" class="form-select">
+                    <option value="">-- Tất cả tác giả --</option>
+                    @foreach (var auth in ViewBag.Authors ?? new List<string>())
+                    {
+                        <option value="@auth" selected="@(ViewBag.Author == auth)">@auth</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-admin-outline flex-fill">
+                        <i class="fas fa-filter me-1"></i>Lọc
+                    </button>
+                    @if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.Category) || !string.IsNullOrEmpty(ViewBag.Author))
+                    {
+                        <a href="/admin/news" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Count -->
+@if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.Category) || !string.IsNullOrEmpty(ViewBag.Author))
+{
+    <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <span>
+            <i class="fas fa-info-circle me-2"></i>
+            Tìm thấy <strong>@Model.Count</strong> kết quả
+        </span>
+        <a href="/admin/news" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-times me-1"></i>Xóa bộ lọc
+        </a>
+    </div>
+}
+
+<div class="admin-table">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tiêu đề</th>
+                    <th>Danh mục</th>
+                    <th>Tác giả</th>
+                    <th>Ngày đăng</th>
+                    <th>Lượt xem</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Title" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            }
+                        </td>
+                        <td>@item.Title</td>
+                        <td><span class="badge bg-primary">@item.Category</span></td>
+                        <td>@item.Author</td>
+                        <td>@item.PublishedAt?.ToString("dd/MM/yyyy")</td>
+                        <td>@item.ViewCount</td>
+                        <td>
+                            <a href="/admin/news/edit/@item.Id" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form asp-action="DeleteNews" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa tin tức này?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="mt-4">
+    @await Html.PartialAsync("_Pagination", Model)
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Chưa có tin tức nào</p>
+        <a href="/admin/news/create" class="btn btn-admin">Thêm tin tức đầu tiên</a>
+    </div>
+}

@@ -1,0 +1,138 @@
+@model PaginatedList<EducationProgram>
+
+@{
+    ViewData["Title"] = "Quản lý Chương trình học";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Danh sách chương trình học</h5>
+    <a href="/admin/programs/create" class="btn btn-admin">
+        <i class="fas fa-plus me-2"></i>Thêm mới
+    </a>
+</div>
+
+<!-- Filter Form -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control" placeholder="Tìm theo tên..." value="@ViewBag.Search">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select name="ageGroup" class="form-select">
+                    <option value="">-- Tất cả độ tuổi --</option>
+                    @foreach (var age in ViewBag.AgeGroups ?? new List<string>())
+                    {
+                        <option value="@age" selected="@(ViewBag.AgeGroup == age)">@age</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select name="sortOrder" class="form-select">
+                    <option value="">-- Sắp xếp --</option>
+                    <option value="" selected="@(string.IsNullOrEmpty(ViewBag.SortOrder))">Mới nhất</option>
+                    <option value="name_asc" selected="@(ViewBag.SortOrder == "name_asc")">Tên A-Z</option>
+                    <option value="name_desc" selected="@(ViewBag.SortOrder == "name_desc")">Tên Z-A</option>
+                    <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc")">Giá thấp-cao</option>
+                    <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc")">Giá cao-thấp</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-admin-outline w-100">
+                    <i class="fas fa-filter me-1"></i>Lọc
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Count -->
+@if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.AgeGroup))
+{
+    <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <span>
+            <i class="fas fa-info-circle me-2"></i>
+            Tìm thấy <strong>@Model.Count</strong> kết quả
+            @if (!string.IsNullOrEmpty(ViewBag.Search))
+            {
+                <span>cho từ khóa "<strong>@ViewBag.Search</strong>"</span>
+            }
+        </span>
+        <a href="/admin/programs" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-times me-1"></i>Xóa bộ lọc
+        </a>
+    </div>
+}
+
+<div class="admin-table">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Tiêu đề</th>
+                    <th>Độ tuổ</th>
+                    <th>Lịch học</th>
+                    <th>Học phí</th>
+                    <th>Ngày tạo</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                            {
+                                <img src="@item.ImageUrl" alt="@item.Title" class="rounded" style="width: 60px; height: 40px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 60px; height: 40px;">
+                                    <i class="fas fa-image text-muted"></i>
+                                </div>
+                            }
+                        </td>
+                        <td>@item.Title</td>
+                        <td>@item.AgeGroup</td>
+                        <td>@item.Schedule</td>
+                        <td>@(item.Price?.ToString("N0") ?? "Liên hệ") đ</td>
+                        <td>@item.CreatedAt.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a href="/admin/programs/edit/@item.Id" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form asp-action="DeleteProgram" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa chương trình này?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="mt-4">
+    @await Html.PartialAsync("_Pagination", Model)
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Chưa có chương trình học nào</p>
+        <a href="/admin/programs/create" class="btn btn-admin">Thêm chương trình đầu tiên</a>
+    </div>
+}

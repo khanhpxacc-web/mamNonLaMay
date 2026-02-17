@@ -1,14 +1,16 @@
 using System.Threading.Tasks;
+using MamNonApp.Data;
 using MamNonApp.Interfaces;
 using MamNonApp.Models.Entities;
 
 namespace MamNonApp.Repositories
 {
     /// <summary>
-    /// Unit of Work Implementation - Design Pattern: Unit of Work
+    /// Unit of Work Implementation - Kết nối với Database thật
     /// </summary>
     public class UnitOfWork : IUnitOfWork
     {
+        private readonly ApplicationDbContext _context;
         private bool _disposed = false;
 
         public IRepository<Teacher> Teachers { get; private set; }
@@ -20,21 +22,22 @@ namespace MamNonApp.Repositories
         public IRepository<Activity> Activities { get; private set; }
         public IRepository<News> News { get; private set; }
 
-        public UnitOfWork()
+        public UnitOfWork(ApplicationDbContext context)
         {
-            Teachers = new Repository<Teacher>(InMemoryDataStore.Teachers);
-            Programs = new Repository<EducationProgram>(InMemoryDataStore.Programs);
-            GalleryItems = new Repository<GalleryItem>(InMemoryDataStore.GalleryItems);
-            ContactMessages = new Repository<ContactMessage>(InMemoryDataStore.ContactMessages);
-            SchoolInfo = new Repository<SchoolInfo>(InMemoryDataStore.SchoolInfo);
-            Testimonials = new Repository<Testimonial>(InMemoryDataStore.Testimonials);
-            Activities = new Repository<Activity>(InMemoryDataStore.Activities);
-            News = new Repository<News>(InMemoryDataStore.News);
+            _context = context;
+            Teachers = new EfRepository<Teacher>(context);
+            Programs = new EfRepository<EducationProgram>(context);
+            GalleryItems = new EfRepository<GalleryItem>(context);
+            ContactMessages = new EfRepository<ContactMessage>(context);
+            SchoolInfo = new EfRepository<SchoolInfo>(context);
+            Testimonials = new EfRepository<Testimonial>(context);
+            Activities = new EfRepository<Activity>(context);
+            News = new EfRepository<News>(context);
         }
 
         public async Task<int> CompleteAsync()
         {
-            return await Task.FromResult(1);
+            return await _context.SaveChangesAsync();
         }
 
         protected virtual void Dispose(bool disposing)
@@ -43,7 +46,7 @@ namespace MamNonApp.Repositories
             {
                 if (disposing)
                 {
-                    // Dispose managed resources
+                    _context.Dispose();
                 }
                 _disposed = true;
             }

@@ -1,0 +1,135 @@
+@model AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_AdminLayout";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-md-6 col-lg-4 col-xl">
+        <div class="stat-card">
+            <div class="icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <h3>@Model.TotalPrograms</h3>
+            <p>Chương trình học</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl">
+        <div class="stat-card">
+            <div class="icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <h3>@Model.TotalTeachers</h3>
+            <p>Giáo viên</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl">
+        <div class="stat-card">
+            <div class="icon">
+                <i class="fas fa-running"></i>
+            </div>
+            <h3>@Model.TotalActivities</h3>
+            <p>Hoạt động</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl">
+        <div class="stat-card">
+            <div class="icon">
+                <i class="fas fa-newspaper"></i>
+            </div>
+            <h3>@Model.TotalNews</h3>
+            <p>Tin tức</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl">
+        <div class="stat-card">
+            <div class="icon">
+                <i class="fas fa-images"></i>
+            </div>
+            <h3>@Model.TotalGalleryItems</h3>
+            <p>Ảnh thư viện</p>
+        </div>
+    </div>
+    <div class="col-md-6 col-lg-4 col-xl">
+        <div class="stat-card">
+            <div class="icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h3>@Model.PendingMessages</h3>
+            <p>Tin nhắn mới</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="admin-table">
+            <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                <h5 class="mb-0 fw-bold">Tin nhắn liên hệ mới nhất</h5>
+                <a href="/admin/messages" class="btn btn-sm btn-admin-outline">Xem tất cả</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>Họ tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Nội dung</th>
+                            <th>Thờ gian</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var message in Model.RecentMessages)
+                        {
+                            <tr>
+                                <td>@message.ParentName</td>
+                                <td>@message.Phone</td>
+                                <td>@(message.Message.Length > 50 ? message.Message.Substring(0, 50) + "..." : message.Message)</td>
+                                <td>@message.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (!message.IsRead)
+                                    {
+                                        <span class="badge bg-warning">Chưa xử lý</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">Đã xử lý</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0 fw-bold">Truy cập nhanh</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="/admin/programs/create" class="btn btn-admin-outline text-start">
+                        <i class="fas fa-plus-circle me-2"></i>Thêm chương trình học
+                    </a>
+                    <a href="/admin/activities/create" class="btn btn-admin-outline text-start">
+                        <i class="fas fa-plus-circle me-2"></i>Thêm hoạt động
+                    </a>
+                    <a href="/admin/news/create" class="btn btn-admin-outline text-start">
+                        <i class="fas fa-plus-circle me-2"></i>Thêm tin tức
+                    </a>
+                    <a href="/admin/gallery/create" class="btn btn-admin-outline text-start">
+                        <i class="fas fa-plus-circle me-2"></i>Thêm ảnh thư viện
+                    </a>
+                    <a href="/admin/teachers/create" class="btn btn-admin-outline text-start">
+                        <i class="fas fa-plus-circle me-2"></i>Thêm giáo viên
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

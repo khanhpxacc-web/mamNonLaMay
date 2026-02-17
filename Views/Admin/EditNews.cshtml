@@ -1,0 +1,84 @@
+@model News
+
+@{
+    ViewData["Title"] = "Sửa Tin tức";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Sửa tin tức</h5>
+    <a href="/admin/news" class="btn btn-admin-outline">
+        <i class="fas fa-arrow-left me-2"></i>Quay lại
+    </a>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form asp-action="EditNews" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ViewCount" />
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label fw-bold">Tiêu đề <span class="text-danger">*</span></label>
+                <input asp-for="Title" class="form-control form-control-lg" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="Category" class="form-label fw-bold">Danh mục <span class="text-danger">*</span></label>
+                    <select asp-for="Category" class="form-select">
+                        <option value="Thông báo">Thông báo</option>
+                        <option value="Tin tức">Tin tức</option>
+                        <option value="Kiến thức">Kiến thức</option>
+                        <option value="Sự kiện">Sự kiện</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label asp-for="Author" class="form-label fw-bold">Tác giả <span class="text-danger">*</span></label>
+                    <input asp-for="Author" class="form-control" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
+                
+                <div class="col-md-4 mb-3">
+                    <label asp-for="PublishedAt" class="form-label fw-bold">Ngày đăng</label>
+                    <input asp-for="PublishedAt" type="date" class="form-control" />
+                </div>
+            </div>
+            
+            @await Html.PartialAsync("_ImageUpload", Model.ImageUrl, new ViewDataDictionary(ViewData) { { "InputId", "ImageUrl" }, { "InputName", "ImageUrl" }, { "Label", "Ảnh đại diện" } })
+            
+            <div class="mb-3">
+                <label asp-for="Tags" class="form-label fw-bold">Tags (phân cách bằng dấu phẩy)</label>
+                <input asp-for="Tags" class="form-control" />
+            </div>
+            
+            <div class="mb-3">
+                <label asp-for="Summary" class="form-label fw-bold">Tóm tắt <span class="text-danger">*</span></label>
+                <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-4">
+                <label asp-for="Content" class="form-label fw-bold">Nội dung chi tiết</label>
+                <textarea asp-for="Content" id="Content" class="form-control" rows="10"></textarea>
+                <div class="form-text">Có thể nhập ảnh trực tiếp vào nội dung bằng cách copy-paste hoặc dùng nút Insert Image</div>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-admin px-4">
+                    <i class="fas fa-save me-2"></i>Cập nhật
+                </button>
+                <a href="/admin/news" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @await Html.PartialAsync("_RichTextEditor", "", new ViewDataDictionary(ViewData) { { "TextareaId", "Content" }, { "Height", 400 } })
+}

@@ -1,0 +1,86 @@
+@model dynamic
+
+@if (Model != null && Model.TotalPages > 1)
+{
+    var pageIndex = (int)Model.PageIndex;
+    var totalPages = (int)Model.TotalPages;
+    var totalCount = (int)Model.TotalCount;
+    var pageSize = (int)Model.PageSize;
+    var hasPreviousPage = (bool)Model.HasPreviousPage;
+    var hasNextPage = (bool)Model.HasNextPage;
+    
+    // Lấy tất cả query parameters hiện tại
+    var query = ViewContext.HttpContext.Request.Query;
+    var queryString = "";
+    
+    foreach (var key in query.Keys)
+    {
+        if (key.ToLower() != "page")
+        {
+            queryString += $"&{key}={Uri.EscapeDataString(query[key]!)}";
+        }
+    }
+
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mb-0">
+            @* Nút Previous *@
+            @if (hasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?@queryString&page=@(pageIndex - 1)" aria-label="Previous">
+                        <span aria-hidden="true"><i class="fas fa-chevron-left"></i></span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-left"></i></span>
+                </li>
+            }
+
+            @* Các số trang *@
+            @for (var i = 1; i <= totalPages; i++)
+            {
+                if (i == pageIndex)
+                {
+                    <li class="page-item active">
+                        <span class="page-link bg-success border-success">@i</span>
+                    </li>
+                }
+                else if (i == 1 || i == totalPages || (i >= pageIndex - 2 && i <= pageIndex + 2))
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?@queryString&page=@i">@i</a>
+                    </li>
+                }
+                else if (i == pageIndex - 3 || i == pageIndex + 3)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+            }
+
+            @* Nút Next *@
+            @if (hasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="?@queryString&page=@(pageIndex + 1)" aria-label="Next">
+                        <span aria-hidden="true"><i class="fas fa-chevron-right"></i></span>
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item disabled">
+                    <span class="page-link"><i class="fas fa-chevron-right"></i></span>
+                </li>
+            }
+        </ul>
+    </nav>
+    
+    <div class="text-center text-muted small mt-2">
+        Hiển thị @((pageIndex - 1) * pageSize + 1) - @(Math.Min(pageIndex * pageSize, totalCount)) trong tổng số @totalCount mục
+    </div>
+}

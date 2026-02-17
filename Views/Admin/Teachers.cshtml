@@ -1,0 +1,130 @@
+@model PaginatedList<Teacher>
+
+@{
+    ViewData["Title"] = "Quản lý Giáo viên";
+    Layout = "_AdminLayout";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="mb-0">Danh sách giáo viên</h5>
+    <a href="/admin/teachers/create" class="btn btn-admin">
+        <i class="fas fa-plus me-2"></i>Thêm mới
+    </a>
+</div>
+
+<!-- Filter Form -->
+<div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" name="search" class="form-control" placeholder="Tìm theo tên hoặc bằng cấp..." value="@ViewBag.Search">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <select name="position" class="form-select">
+                    <option value="">-- Tất cả chức vụ --</option>
+                    @foreach (var pos in ViewBag.Positions ?? new List<string>())
+                    {
+                        <option value="@pos" selected="@(ViewBag.Position == pos)">@pos</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-admin-outline flex-fill">
+                        <i class="fas fa-filter me-1"></i>Lọc
+                    </button>
+                    @if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.Position))
+                    {
+                        <a href="/admin/teachers" class="btn btn-outline-secondary">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Count -->
+@if (!string.IsNullOrEmpty(ViewBag.Search) || !string.IsNullOrEmpty(ViewBag.Position))
+{
+    <div class="alert alert-info d-flex justify-content-between align-items-center">
+        <span>
+            <i class="fas fa-info-circle me-2"></i>
+            Tìm thấy <strong>@Model.Count</strong> kết quả
+        </span>
+        <a href="/admin/teachers" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-times me-1"></i>Xóa bộ lọc
+        </a>
+    </div>
+}
+
+<div class="admin-table">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Ảnh</th>
+                    <th>Họ tên</th>
+                    <th>Chức vụ</th>
+                    <th>Bằng cấp</th>
+                    <th>Kinh nghiệm</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.AvatarUrl))
+                            {
+                                <img src="@item.AvatarUrl" alt="@item.FullName" class="rounded-circle" style="width: 50px; height: 50px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <div class="rounded-circle bg-success d-flex align-items-center justify-content-center text-white" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            }
+                        </td>
+                        <td>@item.FullName</td>
+                        <td>@item.Position</td>
+                        <td>@(item.Qualifications ?? "-")</td>
+                        <td>@item.ExperienceYears năm</td>
+                        <td>
+                            <a href="/admin/teachers/edit/@item.Id" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form asp-action="DeleteTeacher" asp-route-id="@item.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc muốn xóa giáo viên này?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Pagination -->
+<div class="mt-4">
+    @await Html.PartialAsync("_Pagination", Model)
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+        <p class="text-muted">Chưa có giáo viên nào</p>
+        <a href="/admin/teachers/create" class="btn btn-admin">Thêm giáo viên đầu tiên</a>
+    </div>
+}

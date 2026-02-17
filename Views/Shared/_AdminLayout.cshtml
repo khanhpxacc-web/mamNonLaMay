@@ -1,0 +1,316 @@
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin - Mầm Non Lá Mây</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2E7D32;
+            --primary-light: #4CAF50;
+            --primary-dark: #1B5E20;
+            --sidebar-width: 260px;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            color: white;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .sidebar-brand {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-brand h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+        
+        .sidebar-brand small {
+            opacity: 0.8;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: white;
+        }
+        
+        .sidebar-menu i {
+            width: 25px;
+            margin-right: 10px;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            min-height: 100vh;
+        }
+        
+        /* Navbar */
+        .admin-navbar {
+            background: white;
+            padding: 15px 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .admin-navbar .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-navbar .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        /* Content Area */
+        .content-area {
+            padding: 25px;
+        }
+        
+        /* Cards */
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card .icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 0;
+        }
+        
+        .stat-card p {
+            color: #666;
+            margin: 0;
+        }
+        
+        /* Table */
+        .admin-table {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        .admin-table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 15px;
+        }
+        
+        .admin-table td {
+            padding: 15px;
+            vertical-align: middle;
+        }
+        
+        /* Buttons */
+        .btn-admin {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-admin:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+            color: white;
+        }
+        
+        .btn-admin-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-admin-outline:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        /* Alert */
+        .alert-success {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            color: #2e7d32;
+        }
+        
+        /* Mobile Responsive */
+        @@media (max-width: 991px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <i class="fas fa-leaf fa-2x mb-2"></i>
+            <h4>Mầm Non Lá Mây</h4>
+            <small>Hệ thống quản trị</small>
+        </div>
+        
+        <nav class="sidebar-menu">
+            <a href="/admin" class="@(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" ? "active" : "")">
+                <i class="fas fa-tachometer-alt"></i>Dashboard
+            </a>
+            <a href="/admin/programs" class="@(ViewContext.RouteData.Values["Action"]?.ToString()?.Contains("Program") == true ? "active" : "")">
+                <i class="fas fa-book-open"></i>Chương trình học
+            </a>
+            <a href="/admin/teachers" class="@(ViewContext.RouteData.Values["Action"]?.ToString()?.Contains("Teacher") == true ? "active" : "")">
+                <i class="fas fa-chalkboard-teacher"></i>Giáo viên
+            </a>
+            <a href="/admin/activities" class="@(ViewContext.RouteData.Values["Action"]?.ToString()?.Contains("Activity") == true ? "active" : "")">
+                <i class="fas fa-running"></i>Hoạt động
+            </a>
+            <a href="/admin/news" class="@(ViewContext.RouteData.Values["Action"]?.ToString()?.Contains("News") == true ? "active" : "")">
+                <i class="fas fa-newspaper"></i>Tin tức
+            </a>
+            <a href="/admin/gallery" class="@(ViewContext.RouteData.Values["Action"]?.ToString()?.Contains("Gallery") == true ? "active" : "")">
+                <i class="fas fa-images"></i>Thư viện ảnh
+            </a>
+            <a href="/admin/messages" class="@(ViewContext.RouteData.Values["Action"]?.ToString()?.Contains("Message") == true ? "active" : "")">
+                <i class="fas fa-envelope"></i>Liên hệ
+                @if (ViewBag.PendingMessages > 0)
+                {
+                    <span class="badge bg-danger ms-2">@ViewBag.PendingMessages</span>
+                }
+            </a>
+            <div class="border-top border-secondary my-3 mx-3"></div>
+            <a href="/">
+                <i class="fas fa-home"></i>Xem website
+            </a>
+            <form asp-action="Logout" asp-controller="Admin" method="post" class="d-inline">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-link text-decoration-none p-0 w-100 text-start">
+                    <a href="#" onclick="this.closest('form').submit(); return false;">
+                        <i class="fas fa-sign-out-alt"></i>Đăng xuất
+                    </a>
+                </button>
+            </form>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Navbar -->
+        <header class="admin-navbar">
+            <h5 class="mb-0">@ViewData["Title"]</h5>
+            <div class="user-info">
+                <span>@UserManager.GetUserName(User)</span>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content-area">
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- jQuery (required for Summernote) -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
