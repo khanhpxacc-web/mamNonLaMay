@@ -136,3 +136,4 @@ D:\BatHanh\MamNonApp\obj\Debug\net8.0\refint\MamNonApp.dll
 D:\BatHanh\MamNonApp\obj\Debug\net8.0\MamNonApp.pdb
 D:\BatHanh\MamNonApp\obj\Debug\net8.0\MamNonApp.genruntimeconfig.cache
 D:\BatHanh\MamNonApp\obj\Debug\net8.0\ref\MamNonApp.dll
+D:\BatHanh\MamNonApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

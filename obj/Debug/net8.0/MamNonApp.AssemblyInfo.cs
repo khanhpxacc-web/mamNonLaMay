@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MamNonApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d42f55e409a3c38bbf3a4c44cdde4d32f582e561")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47b859dd45da24c668729d56eff343a2e1b6627b")]
 [assembly: System.Reflection.AssemblyProductAttribute("MamNonApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MamNonApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

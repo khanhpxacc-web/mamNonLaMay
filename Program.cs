@@ -40,14 +40,25 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
-// Configure Application Cookies
+// Configure Application Cookies - Thờ gian đăng nhập Admin
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Admin/Login";
     options.LogoutPath = "/Admin/Logout";
     options.AccessDeniedPath = "/Admin/AccessDenied";
-    options.ExpireTimeSpan = TimeSpan.FromHours(2);
+    
+    // Thờ gian hết hạn phiên đăng nhập (8 giờ = 1 ngày làm việc)
+    options.ExpireTimeSpan = TimeSpan.FromHours(8);
+    
+    // Tự động gia hạn nếu ngườ dùng hoạt động trong 1 nửa thờ gian hết hạn
     options.SlidingExpiration = true;
+    
+    // Cookie chỉ gửi qua HTTPS (bật khi deploy production)
+    // options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    
+    // Cookie chỉ truy cập được bởi server (chống XSS)
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
 // ============================================
