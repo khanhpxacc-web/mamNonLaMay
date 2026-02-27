@@ -1,5 +1,5 @@
 /* ============================================
-   MamNonApp - Trường Mầm Non Hoa Hướng Dương
+   MamNonApp - Trường Mầm Non Lá Mây
    Main JavaScript
    ============================================ */
 

@@ -56,7 +56,7 @@ namespace MamNonApp.Controllers
             {
                 Seo = new SeoViewModel
                 {
-                    Title = $"{program.Title} | Trường Mầm Non Hoa Hướng Dương",
+                    Title = $"{program.Title} | Trường Mầm Non Lá Mây",
                     MetaDescription = program.Description ?? $"Chi tiết về {program.Title}",
                     MetaKeywords = $"{program.Title}, chương trình mầm non, {program.AgeGroup}",
                     CanonicalUrl = $"https://mamnonlamay.edu.vn/chuong-trinh-hoc/{id}/{slug}",

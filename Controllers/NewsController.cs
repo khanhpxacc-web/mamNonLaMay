@@ -46,9 +46,9 @@ namespace MamNonApp.Controllers
                 Seo = new SeoViewModel
                 {
                     Title = string.IsNullOrEmpty(category) 
-                        ? "Tin Tức & Bài Viết | Trường Mầm Non Hoa Hướng Dương"
-                        : $"Tin Tức - {category} | Trường Mầm Non Hoa Hướng Dương",
-                    MetaDescription = "Cập nhật tin tức, thông báo, kiến thức giáo dục mầm non từ Trường Hoa Hướng Dương.",
+                        ? "Tin Tức & Bài Viết | Trường Mầm Non Lá Mây"
+                        : $"Tin Tức - {category} | Trường Mầm Non Lá Mây",
+                    MetaDescription = "Cập nhật tin tức, thông báo, kiến thức giáo dục mầm non từ Trường Mầm Non Lá Mây.",
                     MetaKeywords = "tin tức mầm non, thông báo, kiến thức giáo dục",
                     CanonicalUrl = string.IsNullOrEmpty(category) 
                         ? "https://mamnonlamay.edu.vn/tin-tuc"
@@ -89,7 +89,7 @@ namespace MamNonApp.Controllers
             {
                 Seo = new SeoViewModel
                 {
-                    Title = $"{newsItem.Title} | Tin Tức | Trường Mầm Non Hoa Hướng Dương",
+                    Title = $"{newsItem.Title} | Tin Tức | Trường Mầm Non Lá Mây",
                     MetaDescription = newsItem.Summary ?? $"Chi tiết về {newsItem.Title}",
                     MetaKeywords = $"{newsItem.Title}, {newsItem.Tags}, tin tức mầm non",
                     CanonicalUrl = $"https://mamnonlamay.edu.vn/tin-tuc/{id}/{newsItem.Slug}",

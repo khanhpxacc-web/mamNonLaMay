@@ -40,14 +40,14 @@ namespace MamNonApp.Controllers
                 Seo = new SeoViewModel
                 {
                     Title = string.IsNullOrEmpty(category) 
-                        ? "Hoạt Động | Trường Mầm Non Hoa Hướng Dương"
-                        : $"Hoạt Động - {category} | Trường Mầm Non Hoa Hướng Dương",
-                    MetaDescription = "Khám phá các hoạt động phong phú tại Trường Mầm Non Hoa Hướng Dương: ngoại khóa, lễ hội, thể thao, vui chơi.",
+                        ? "Hoạt Động | Trường Mầm Non Lá Mây"
+                        : $"Hoạt Động - {category} | Trường Mầm Non Lá Mây",
+                    MetaDescription = "Khám phá các hoạt động phong phú tại Trường Mầm Non Lá Mây: ngoại khóa, lễ hội, thể thao, vui chơi.",
                     MetaKeywords = "hoạt động mầm non, ngoại khóa, lễ hội, thể thao",
                     CanonicalUrl = string.IsNullOrEmpty(category) 
                         ? "https://mamnonlamay.edu.vn/hoat-dong"
                         : $"https://mamnonlamay.edu.vn/hoat-dong?category={category}",
-                    OgTitle = "Hoạt Động Tại Hoa Hướng Dương",
+                    OgTitle = "Hoạt Động Tại Mầm Non Lá Mây",
                     OgDescription = "Các hoạt động phong phú cho trẻ",
                     OgImage = "https://mamnonlamay.edu.vn/images/activities-og.jpg",
                     OgType = "website"
@@ -80,7 +80,7 @@ namespace MamNonApp.Controllers
             {
                 Seo = new SeoViewModel
                 {
-                    Title = $"{activity.Title} | Hoạt Động | Trường Mầm Non Hoa Hướng Dương",
+                    Title = $"{activity.Title} | Hoạt Động | Trường Mầm Non Lá Mây",
                     MetaDescription = activity.Summary ?? $"Chi tiết về {activity.Title}",
                     MetaKeywords = $"{activity.Title}, hoạt động mầm non, {activity.Category}",
                     CanonicalUrl = $"https://mamnonlamay.edu.vn/hoat-dong/{id}/{slug}",

@@ -27,7 +27,7 @@ namespace MamNonApp.Data
             base.OnModelCreating(modelBuilder);
 
             // Configurations
-            modelBuilder.Entity<EducationProgram>().ToTable("Programs");
+            modelBuilder.Entity<EducationProgram>().ToTable("EducationPrograms");
             modelBuilder.Entity<News>().ToTable("News");
         }
     }

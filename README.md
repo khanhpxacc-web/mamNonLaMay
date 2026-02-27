@@ -1,4 +1,4 @@
-# Trường Mầm Non Hoa Hướng Dương - MamNonApp
+# Trường Mầm Non Lá Mây - MamNonApp
 
 Một trang web giới thiệu trường mầm non hoàn chỉnh sử dụng .NET 9 MVC với các design patterns chuẩn và tối ưu SEO.
 

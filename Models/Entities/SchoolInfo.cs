@@ -8,7 +8,7 @@ namespace MamNonApp.Models.Entities
     public class SchoolInfo : BaseEntity
     {
         [StringLength(200)]
-        public string Name { get; set; } = "Trường Mầm Non Hoa Hướng Dương";
+        public string Name { get; set; } = "Trường Mầm Non Lá Mây";
 
         [StringLength(500)]
         public string Address { get; set; } = string.Empty;
